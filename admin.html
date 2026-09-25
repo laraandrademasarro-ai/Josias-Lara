@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Admin | Lara & Josias</title>
+  <meta
+    name="theme-color"
+    content="#0b1f3a"
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  >
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+  >
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="overlay" id="overlay"></div>
+  <!-- =========================
+       MENU LATERAL
+  ========================== -->
+  <aside class="sidebar" id="sidebar">
+    <button
+      class="fechar-menu"
+      id="fecharMenu"
+      type="button"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="marca">
+      <div class="monograma">
+        LJ
+      </div>
+      <div class="marca-texto">
+        <h1>Lara & Josias</h1>
+        <span>06 • 03 • 2027</span>
+      </div>
+    </div>
+    <div class="linha-menu"></div>
+    <nav class="menu">
+      <button
+        class="menu-item ativo"
+        data-page="dashboard"
+        type="button"
+      >
+        <i class="fa-solid fa-house"></i>
+        <span>Dashboard</span>
+      </button>
+      <button
+        class="menu-item"
+        data-page="convites"
+        type="button"
+      >
+        <i class="fa-regular fa-envelope"></i>
+        <span>Convites</span>
+      </button>
+      <button
+        class="menu-item"
+        data-page="convidados"
+        type="button"
+      >
+        <i class="fa-solid fa-users"></i>
+        <span>Convidados</span>
+      </button>
+      <button
+        class="menu-item"
+        data-page="confirmacoes"
+        type="button"
+      >
+        <i class="fa-regular fa-circle-check"></i>
+        <span>Confirmações</span>
+      </button>
+      <button
+        class="menu-item"
+        data-page="presentes"
+        type="button"
+      >
+        <i class="fa-solid fa-gift"></i>
+        <span>Presentes</span>
+      </button>
+      <button
+        class="menu-item"
+        data-page="recados"
+        type="button"
+      >
+        <i class="fa-regular fa-message"></i>
+        <span>Recados</span>
+      </button>
+      <button
+        class="menu-item"
+        data-page="fotos"
+        type="button"
+      >
+        <i class="fa-regular fa-images"></i>
+        <span>Fotos</span>
+      </button>
+      <button
+        class="menu-item"
+        data-page="configuracoes"
+        type="button"
+      >
+        <i class="fa-solid fa-gear"></i>
+        <span>Configurações</span>
+      </button>
+    </nav>
+    <div class="menu-rodape">
+      <span>Painel do casamento</span>
+      <strong>Lara & Josias</strong>
+      <small>Março de 2027</small>
+    </div>
+  </aside>
+  <!-- =========================
+       CONTEÚDO PRINCIPAL
+  ========================== -->
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar-esquerda">
+        <button
+          class="botao-menu-mobile"
+          id="abrirMenu"
+          type="button"
+        >
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div>
+          <span class="topbar-mini">
+            Painel do casamento
+          </span>
+          <h2 id="tituloPagina">
+            Dashboard
+          </h2>
+        </div>
+      </div>
+      <button
+        class="botao-principal"
+        id="botaoNovoConvite"
+        type="button"
+      >
+        <i class="fa-solid fa-plus"></i>
+        Novo convite
+      </button>
+    </header>
+    <div class="conteudo">
+      <!-- =========================
+           DASHBOARD
+      ========================== -->
+      <section
+        class="pagina ativa"
+        id="dashboard"
+      >
+        <div class="hero-dashboard">
+          <div class="hero-texto">
+            <span class="mini-titulo claro">
+              06 de março de 2027
+            </span>
+            <h1>
+              Nosso grande dia está chegando.
+            </h1>
+            <p>
+              Acompanhe convites, confirmações,
+              presentes, recados e todos os detalhes
+              importantes do casamento.
+            </p>
+          </div>
+          <div class="contador">
+            <span>Faltam</span>
+            <strong id="diasRestantes">
+              --
+            </strong>
+            <small>dias</small>
+          </div>
+        </div>
+        <div class="cards-resumo">
+          <div class="card-resumo">
+            <div class="card-resumo-topo">
+              <span>Convidados</span>
+              <div class="icone-redondo">
+                <i class="fa-solid fa-users"></i>
+              </div>
+            </div>
+            <strong id="totalConvidados">
+              0
+            </strong>
+            <small>
+              Total cadastrado
+            </small>
+          </div>
+          <div class="card-resumo">
+            <div class="card-resumo-topo">
+              <span>Confirmados</span>
+              <div class="icone-redondo">
+                <i class="fa-regular fa-circle-check"></i>
+              </div>
+            </div>
+            <strong>
+              0
+            </strong>
+            <small>
+              Presenças confirmadas
+            </small>
+          </div>
+          <div class="card-resumo">
+            <div class="card-resumo-topo">
+              <span>Pendentes</span>
+              <div class="icone-redondo">
+                <i class="fa-regular fa-clock"></i>
+              </div>
+            </div>
+            <strong id="totalPendentes">
+              0
+            </strong>
+            <small>
+              Aguardando resposta
+            </small>
+          </div>
+          <div class="card-resumo">
+            <div class="card-resumo-topo">
+              <span>Não irão</span>
+              <div class="icone-redondo">
+                <i class="fa-solid fa-user-xmark"></i>
+              </div>
+            </div>
+            <strong>
+              0
+            </strong>
+            <small>
+              Não poderão comparecer
+            </small>
+          </div>
+          <div class="card-resumo">
+            <div class="card-resumo-topo">
+              <span>Presentes</span>
+              <div class="icone-redondo">
+                <i class="fa-solid fa-gift"></i>
+              </div>
+            </div>
+            <strong>
+              0
+            </strong>
+            <small>
+              Presentes escolhidos
+            </small>
+          </div>
+          <div class="card-resumo">
+            <div class="card-resumo-topo">
+              <span>Recados</span>
+              <div class="icone-redondo">
+                <i class="fa-regular fa-message"></i>
+              </div>
+            </div>
+            <strong>
+              0
+            </strong>
+            <small>
+              Mensagens recebidas
+            </small>
+          </div>
+        </div>
+        <div class="dashboard-colunas">
+          <div class="painel">
+            <div class="painel-cabecalho">
+              <div>
+                <span class="mini-titulo">
+                  Convites
+                </span>
+                <h3>
+                  Convites recentes
+                </h3>
+              </div>
+              <button
+                class="botao-link"
+                data-ir="convites"
+                type="button"
+              >
+                Ver todos
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+            <div
+              class="lista-atividade"
+              id="convitesRecentes"
+            >
+              <div class="estado-vazio-mini">
+                Nenhum convite criado ainda.
+              </div>
+            </div>
+          </div>
+          <div class="painel">
+            <div class="painel-cabecalho">
+              <div>
+                <span class="mini-titulo">
+                  Carinho
+                </span>
+                <h3>
+                  Recados recentes
+                </h3>
+              </div>
+              <button
+                class="botao-link"
+                data-ir="recados"
+                type="button"
+              >
+                Ver todos
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+            <div class="lista-recados">
+              <div class="estado-vazio-mini">
+                Os recados dos convidados aparecerão aqui.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- =========================
+           CONVITES
+      ========================== -->
+      <section
+        class="pagina"
+        id="convites"
+      >
+        <div class="pagina-cabecalho">
+          <div>
+            <span class="mini-titulo">
+              Convites personalizados
+            </span>
+            <h1>
+              Convites
+            </h1>
+            <p>
+              Crie os convites comuns, padrinhos,
+              pais e celebrante.
+            </p>
+          </div>
+          <button
+            class="botao-principal"
+            id="novoConviteInterno"
+            type="button"
+          >
+            <i class="fa-solid fa-plus"></i>
+            Criar convite
+          </button>
+        </div>
+        <div class="barra-convites">
+          <div class="filtros">
+            <button
+              class="filtro ativo"
+              data-filtro="todos"
+              type="button"
+            >
+              Todos
+            </button>
+            <button
+              class="filtro"
+              data-filtro="comum"
+              type="button"
+            >
+              Comum
+            </button>
+            <button
+              class="filtro"
+              data-filtro="padrinhos"
+              type="button"
+            >
+              Padrinhos
+            </button>
+            <button
+              class="filtro"
+              data-filtro="pais"
+              type="button"
+            >
+              Pais
+            </button>
+            <button
+              class="filtro"
+              data-filtro="celebrante"
+              type="button"
+            >
+              Celebrante
+            </button>
+          </div>
+          <div class="barra-pesquisa">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+              type="text"
+              id="pesquisaConvites"
+              placeholder="Pesquisar convite..."
+            >
+          </div>
+        </div>
+        <div class="tabela-card">
+          <div class="tabela tabela-convites">
+            <div class="tabela-linha tabela-titulo">
+              <div>Convite</div>
+              <div>Tipo</div>
+              <div>Pessoas</div>
+              <div>Status</div>
+              <div>Ações</div>
+            </div>
+            <div id="listaConvites"></div>
+          </div>
+        </div>
+      </section>
+      <!-- =========================
+           CONVIDADOS
+      ========================== -->
+      <section
+        class="pagina"
+        id="convidados"
+      >
+        <div class="pagina-cabecalho">
+          <div>
+            <span class="mini-titulo">
+              Lista geral
+            </span>
+            <h1>
+              Convidados
+            </h1>
+            <p>
+              Pessoas vinculadas aos convites.
+            </p>
+          </div>
+        </div>
+        <div class="tabela-card">
+          <div class="tabela tabela-convidados">
+            <div class="tabela-linha tabela-titulo">
+              <div>Nome</div>
+              <div>Convite</div>
+              <div>Tipo</div>
+              <div>Status</div>
+              <div></div>
+            </div>
+            <div id="listaConvidados"></div>
+          </div>
+        </div>
+      </section>
+      <!-- =========================
+           CONFIRMAÇÕES
+      ========================== -->
+      <section
+        class="pagina"
+        id="confirmacoes"
+      >
+        <div class="pagina-cabecalho">
+          <div>
+            <span class="mini-titulo">
+              RSVP
+            </span>
+            <h1>
+              Confirmações
+            </h1>
+            <p>
+              Aqui veremos as respostas dos convidados.
+            </p>
+          </div>
+        </div>
+        <div class="placeholder">
+          <i class="fa-regular fa-circle-check"></i>
+          <h2>
+            Confirmações de presença
+          </h2>
+          <p>
+            Essa área será ligada ao Supabase depois.
+            Cada pessoa poderá responder individualmente
+            se irá ou não ao casamento.
+          </p>
+        </div>
+      </section>
+      <!-- =========================
+           PRESENTES
+      ========================== -->
+      <section
+        class="pagina"
+        id="presentes"
+      >
+        <div class="pagina-cabecalho">
+          <div>
+            <span class="mini-titulo">
+              Lista de presentes
+            </span>
+            <h1>
+              Presentes
+            </h1>
+            <p>
+              Foto, nome e descrição.
+              Sem valores.
+            </p>
+          </div>
+          <button
+            class="botao-principal"
+            id="novoPresente"
+            type="button"
+          >
+            <i class="fa-solid fa-plus"></i>
+            Adicionar presente
+          </button>
+        </div>
+        <div class="grade-presentes">
+          <div class="estado-vazio-grande">
+            <i class="fa-solid fa-gift"></i>
+            <h2>
+              Nenhum presente cadastrado
+            </h2>
+            <p>
+              Depois vamos salvar fotos e descrições
+              diretamente no Supabase.
+            </p>
+          </div>
+        </div>
+      </section>
+      <!-- =========================
+           RECADOS
+      ========================== -->
+      <section
+        class="pagina"
+        id="recados"
+      >
+        <div class="pagina-cabecalho">
+          <div>
+            <span class="mini-titulo">
+              Mensagens especiais
+            </span>
+            <h1>
+              Recados
+            </h1>
+            <p>
+              Mensagens enviadas pelos convidados
+              para Lara & Josias.
+            </p>
+          </div>
+        </div>
+        <div class="estado-vazio-grande">
+          <i class="fa-regular fa-heart"></i>
+          <h2>
+            Nenhum recado ainda
+          </h2>
+          <p>
+            Quando o site público estiver pronto,
+            os convidados poderão deixar uma mensagem
+            para o casal.
+          </p>
+        </div>
+      </section>
+      <!-- =========================
+           FOTOS
+      ========================== -->
+      <section class="pagina" id="fotos" aria-labelledby="tituloFotos">
+        <div class="pagina-cabecalho">
+          <div>
+            <span class="mini-titulo">Nossa história em imagens</span>
+            <h1 id="tituloFotos">Fotos</h1>
+            <p>Escolha as lembranças do casal e as referências de traje.</p>
+          </div>
+          <button class="botao-secundario" type="button" id="recarregarFotos">Atualizar fotos</button>
+        </div>
+        <div class="painel fotos-login">
+          <h3>Acesso às fotos</h3>
+          <p id="loginFotosStatus" role="status" aria-live="polite">Preparando conexão…</p>
+          <form id="formLoginFotos">
+            <div class="campo">
+              <label for="emailFotos">E-mail do administrador</label>
+              <input id="emailFotos" type="email" autocomplete="username" required>
+            </div>
+            <div class="campo">
+              <label for="senhaFotos">Senha</label>
+              <input id="senhaFotos" type="password" autocomplete="current-password" required>
+            </div>
+            <button id="entrarFotos" class="botao-principal" type="submit">Entrar</button>
+          </form>
+          <div id="contaFotos" hidden>
+            <span id="emailContaFotos"></span>
+            <button id="sairFotos" class="botao-secundario" type="button">Sair</button>
+          </div>
+        </div>
+        <p class="fotos-aviso" id="fotosConexao"></p>
+        <p id="fotosStatus" class="fotos-status" role="status" aria-live="polite"></p>
+        <div class="fotos-dupla" id="fotosPrincipais"></div>
+        <div class="painel fotos-secao">
+          <div class="painel-cabecalho">
+            <div><span class="mini-titulo">Memórias do casal</span><h3>Galeria</h3></div>
+            <button type="button" class="botao-principal" id="adicionarFotosGaleria">Adicionar fotos</button>
+          </div>
+          <p class="fotos-ajuda">JPG, PNG ou WebP, até 6 MB por foto. Selecione várias de uma vez.</p>
+          <div class="fotos-galeria" id="galeriaFotos"></div>
+        </div>
+        <div class="fotos-secao">
+          <div class="painel-cabecalho"><div><span class="mini-titulo">Manual dos padrinhos</span><h3>Referências de traje</h3></div></div>
+          <div class="fotos-dupla" id="fotosTrajes"></div>
+        </div>
+        <input type="file" id="selecionarFotos" accept="image/jpeg,image/png,image/webp" hidden>
+      </section>
+
+      <!-- =========================
+           CONFIGURAÇÕES
+      ========================== -->
+      <section
+        class="pagina"
+        id="configuracoes"
+      >
+        <div class="pagina-cabecalho">
+          <div>
+            <span class="mini-titulo">
+              Informações gerais
+            </span>
+            <h1>
+              Configurações
+            </h1>
+            <p>
+              Dados gerais do casamento.
+            </p>
+          </div>
+        </div>
+        <div class="config-grid">
+          <div class="painel">
+            <div class="painel-cabecalho">
+              <div>
+                <span class="mini-titulo">
+                  Casamento
+                </span>
+                <h3>
+                  Informações principais
+                </h3>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="campo">
+                <label>
+                  Nome da noiva
+                </label>
+                <input
+                  type="text"
+                  value="Lara"
+                >
+              </div>
+              <div class="campo">
+                <label>
+                  Nome do noivo
+                </label>
+                <input
+                  type="text"
+                  value="Josias"
+                >
+              </div>
+              <div class="campo">
+                <label>
+                  Data
+                </label>
+                <input
+                  type="date"
+                  value="2027-03-06"
+                >
+              </div>
+              <div class="campo">
+                <label>
+                  Horário
+                </label>
+                <input
+                  type="time"
+                  value="17:00"
+                >
+              </div>
+            </div>
+          </div>
+          <div class="painel">
+            <div class="painel-cabecalho">
+              <div>
+                <span class="mini-titulo">
+                  Música
+                </span>
+                <h3>
+                  Música principal
+                </h3>
+              </div>
+            </div>
+            <div class="campo">
+              <label>
+                Arquivo
+              </label>
+              <input
+                type="text"
+                placeholder="musica.mp3"
+              >
+              <small>
+                Essa será a música padrão dos convites.
+              </small>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <!-- =========================
+       MODAL CONVITE
+  ========================== -->
+  <div
+    class="modal-overlay"
+    id="modalConvite"
+  >
+    <div class="modal">
+      <div class="modal-topo">
+        <div>
+          <span class="mini-titulo">
+            Convites
+          </span>
+          <h2 id="tituloModalConvite">
+            Criar convite
+          </h2>
+        </div>
+        <button
+          class="fechar-modal"
+          data-fechar-modal="modalConvite"
+          type="button"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="formConvite">
+        <input
+          type="hidden"
+          id="conviteId"
+        >
+        <div class="campo">
+          <label>
+            Nome do convite
+          </label>
+          <input
+            type="text"
+            id="nomeConvite"
+            placeholder="Ex.: João & Mariana"
+            required
+          >
+          <small>
+            Esse será o nome exibido no painel.
+          </small>
+        </div>
+        <div class="campo">
+          <label>
+            Tipo de convite
+          </label>
+          <select
+            id="tipoConvite"
+            required
+          >
+            <option value="">
+              Selecione
+            </option>
+            <option value="comum">
+              Comum
+            </option>
+            <option value="padrinhos">
+              Padrinhos
+            </option>
+            <option value="pais">
+              Pais
+            </option>
+            <option value="celebrante">
+              Celebrante
+            </option>
+          </select>
+        </div>
+        <div class="campo">
+          <div class="campo-titulo-linha">
+            <div>
+              <label>
+                Pessoas deste convite
+              </label>
+              <small>
+                Cadastre cada pessoa separadamente.
+              </small>
+            </div>
+            <button
+              class="botao-adicionar-pessoa"
+              id="adicionarPessoa"
+              type="button"
+            >
+              <i class="fa-solid fa-plus"></i>
+              Adicionar pessoa
+            </button>
+          </div>
+          <div
+            class="lista-pessoas-form"
+            id="listaPessoasForm"
+          ></div>
+        </div>
+        <div class="campo">
+          <label>
+            Mensagem personalizada
+          </label>
+          <textarea
+            id="mensagemConvite"
+            rows="4"
+            placeholder="Mensagem especial opcional..."
+          ></textarea>
+        </div>
+        <div class="campo">
+          <label>
+            Música personalizada
+          </label>
+          <input
+            type="text"
+            id="musicaConvite"
+            placeholder="Ex.: musica-padrinhos.mp3"
+          >
+          <small>
+            Opcional. Se ficar vazio, será usada
+            a música padrão do casamento.
+          </small>
+        </div>
+        <div class="modal-acoes">
+          <button
+            class="botao-secundario"
+            data-fechar-modal="modalConvite"
+            type="button"
+          >
+            Cancelar
+          </button>
+          <button
+            class="botao-principal"
+            id="salvarConvite"
+            type="submit"
+          >
+            Criar convite
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- =========================
+       MODAL PRESENTE
+  ========================== -->
+  <div
+    class="modal-overlay"
+    id="modalPresente"
+  >
+    <div class="modal">
+      <div class="modal-topo">
+        <div>
+          <span class="mini-titulo">
+            Lista de presentes
+          </span>
+          <h2>
+            Adicionar presente
+          </h2>
+        </div>
+        <button
+          class="fechar-modal"
+          data-fechar-modal="modalPresente"
+          type="button"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="formPresente">
+        <div class="campo">
+          <label>
+            Foto
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+          >
+        </div>
+        <div class="campo">
+          <label>
+            Nome do presente
+          </label>
+          <input
+            type="text"
+            placeholder="Ex.: Jogo de panelas"
+            required
+          >
+        </div>
+        <div class="campo">
+          <label>
+            Descrição
+          </label>
+          <textarea
+            rows="4"
+            placeholder="Descrição do presente"
+            required
+          ></textarea>
+        </div>
+        <div class="modal-acoes">
+          <button
+            class="botao-secundario"
+            data-fechar-modal="modalPresente"
+            type="button"
+          >
+            Cancelar
+          </button>
+          <button
+            class="botao-principal"
+            type="submit"
+          >
+            Adicionar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="admin.js"></script>
+  <script src="admin-auth.js"></script>
+  <script src="admin-cloud.js"></script>
+</body>
+</html>
