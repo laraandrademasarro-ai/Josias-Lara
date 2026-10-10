@@ -130,6 +130,7 @@ iniciarConvite();
 ========================================= */
 
 function carregarConvite() {
+  siteConvite.dataset.tipo = convite.tipo;
   nomeConviteHero.textContent =
     convite.nome;
 
@@ -178,13 +179,13 @@ function carregarConvite() {
 
 function configurarComum() {
   heroTipo.textContent =
-    "Você é nosso convidado";
+    "Temos um convite especial";
 
   tituloBoasVindas.textContent =
-    "Que alegria ter você conosco";
+    "Nosso grande dia";
 
   textoBoasVindas.textContent =
-    "Há momentos que ganham ainda mais significado quando compartilhados com pessoas especiais. Será uma alegria ter você conosco neste novo capítulo da nossa história.";
+    "Deus nos permitiu chegar até aqui e, com gratidão no coração, estamos prestes a dar um dos passos mais importantes das nossas vidas.\n\nQueremos celebrar esse momento ao lado de pessoas especiais para nós.";
 }
 
 
@@ -193,8 +194,23 @@ function configurarComum() {
 ========================================= */
 
 function configurarPadrinhos() {
+  for (const [folder, count, id, label] of [['padrinhos', 7, 'artesPadrinhos', 'Manual dos padrinhos'], ['madrinhas', 6, 'artesMadrinhas', 'Manual das madrinhas']]) {
+    const container = document.getElementById(id);
+    if (container.children.length) continue;
+    for (let page = 1; page <= count; page++) {
+      const link = document.createElement('a');
+      link.href = 'assets/manuais/' + folder + '/' + page + '.png';
+      link.target = '_blank'; link.rel = 'noopener noreferrer';
+      link.setAttribute('aria-label', label + ', página ' + page + '. Abrir imagem ampliada');
+      const img = document.createElement('img');
+      img.src = link.href; img.alt = label + ' — página ' + page + ' de ' + count;
+      img.width = 1654; img.height = 1654; img.loading = 'lazy'; img.decoding = 'async';
+      link.append(img); container.append(link);
+    }
+  }
+
   heroTipo.textContent =
-    "Um convite muito especial";
+    "Temos um convite especial";
 
   tituloBoasVindas.textContent =
     "Queremos vocês ainda mais perto";
@@ -213,6 +229,7 @@ function configurarPadrinhos() {
 ========================================= */
 
 function configurarPais() {
+  mensagemHero.textContent = "Existem pessoas que não apenas acompanham a nossa história, mas ajudam a escrevê-la.";
   heroTipo.textContent =
     "Para quem esteve conosco desde o começo";
 
@@ -245,9 +262,7 @@ function configurarPais() {
         </strong>
 
         <span>
-          Vocês não são apenas convidados.
-          Fazem parte da história que nos trouxe
-          até este momento.
+          Vocês sempre terão um lugar especial na nossa história.
         </span>
       </div>
     </div>
@@ -261,10 +276,13 @@ function configurarPais() {
         </strong>
 
         <span>
-          Este dia também celebra tudo aquilo
-          que aprendemos e recebemos de vocês.
+          O nosso casamento também celebra a família que Deus nos deu e tudo o que recebemos de vocês.
         </span>
       </div>
+    </div>
+    <div class="info-especial">
+      <i class="fa-regular fa-heart"></i>
+      <div><strong>Nosso amor</strong><span>Parte do que somos hoje carrega o amor, o cuidado e os valores que aprendemos dentro de casa.</span></div>
     </div>
   `;
 }
@@ -279,23 +297,23 @@ function configurarCelebrante() {
     "Temos um convite especial";
 
   tituloBoasVindas.textContent =
-    "Gostaríamos que fizesse parte deste momento";
+    "Gostaríamos que fizessem parte deste momento";
 
   textoBoasVindas.textContent =
-    "Entre tantas pessoas importantes em nossa caminhada, gostaríamos de convidá-lo para uma participação muito especial no início da nossa vida juntos.";
+    "Entre tantas pessoas importantes em nossa caminhada, existem aquelas que gostaríamos de ter ao nosso lado em um dos dias mais especiais das nossas vidas.\n\nPor isso, queremos convidá-los para celebrar conosco o início de uma nova etapa da nossa história.";
 
   secaoEspecial.classList.add(
     "ativo"
   );
 
   especialMiniTitulo.textContent =
-    "Convite para celebrar";
+    "Além de desejarmos a presença de vocês no nosso casamento, gostaríamos de fazer um convite ainda mais especial:";
 
   especialTitulo.textContent =
-    "Aceita celebrar nossa cerimônia?";
+    "Pr. Amós, aceita celebrar e conduzir a nossa cerimônia de casamento?";
 
   especialTexto.textContent =
-    "Será uma honra ter sua participação conduzindo este momento tão importante para nós.";
+    "Queremos que alguém que compreenda o valor desse compromisso esteja à frente desse momento tão importante, nos conduzindo diante de Deus.\n\nSerá uma honra ter o senhor celebrando o nosso “sim”!";
 
   especialConteudo.innerHTML = `
     <div class="info-especial">
@@ -307,7 +325,7 @@ function configurarCelebrante() {
         </strong>
 
         <span>
-          06 de março de 2027.
+          06 de Março de 2027
         </span>
       </div>
     </div>
@@ -321,26 +339,12 @@ function configurarCelebrante() {
         </strong>
 
         <span>
-          17:00.
+          16h30
         </span>
       </div>
     </div>
 
-    <div class="info-especial">
-      <i class="fa-regular fa-message"></i>
 
-      <div>
-        <strong>
-          Informações da cerimônia
-        </strong>
-
-        <span>
-          Depois poderemos colocar aqui roteiro,
-          contatos, horário recomendado de chegada
-          e demais orientações.
-        </span>
-      </div>
-    </div>
   `;
 
   secaoPresentes.style.display =
@@ -562,7 +566,7 @@ function textoStatus(status) {
 function atualizarContagem() {
   const casamento =
     new Date(
-      "2027-03-06T17:00:00"
+      "2027-03-06T16:30:00-03:00"
     );
 
   const agora =
