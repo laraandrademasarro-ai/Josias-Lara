@@ -1160,34 +1160,6 @@ adicionarEstilosAtividade();
 /* =========================================
    PRESENTES
 ========================================= */
-document
-  .getElementById(
-    "novoPresente"
-  )
-  ?.addEventListener(
-    "click",
-    () => {
-      abrirModal(
-        "modalPresente"
-      );
-    }
-  );
-document
-  .getElementById(
-    "formPresente"
-  )
-  ?.addEventListener(
-    "submit",
-    (event) => {
-      event.preventDefault();
-      alert(
-        "Presentes serão conectados ao Supabase na próxima etapa."
-      );
-      fecharModal(
-        "modalPresente"
-      );
-    }
-  );
 /* =========================================
    ATUALIZAÇÃO GERAL
 ========================================= */

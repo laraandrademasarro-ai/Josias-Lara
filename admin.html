@@ -504,19 +504,7 @@
             Adicionar presente
           </button>
         </div>
-        <div class="grade-presentes">
-          <div class="estado-vazio-grande">
-            <i class="fa-solid fa-gift"></i>
-            <h2>
-              Nenhum presente cadastrado
-            </h2>
-            <p>
-              Depois vamos salvar fotos e descrições
-              diretamente no Supabase.
-            </p>
-          </div>
-        </div>
-      </section>
+        <button type="button" id="atualizarPresentes" class="botao-secundario">Atualizar presentes</button><p id="presentesStatus" role="status" aria-live="polite"></p><div class="grade-presentes" id="listaPresentes"></div></section>
       <!-- =========================
            RECADOS
       ========================== -->
@@ -847,7 +835,7 @@
           <span class="mini-titulo">
             Lista de presentes
           </span>
-          <h2>
+          <h2 id="tituloPresente">
             Adicionar presente
           </h2>
         </div>
@@ -866,7 +854,7 @@
           </label>
           <input
             type="file"
-            accept="image/*"
+            id="fotoPresente" accept="image/jpeg,image/png,image/webp" required
           >
         </div>
         <div class="campo">
@@ -875,7 +863,7 @@
           </label>
           <input
             type="text"
-            placeholder="Ex.: Jogo de panelas"
+            id="nomePresente" maxlength="120" placeholder="Ex.: Jogo de panelas"
             required
           >
         </div>
@@ -885,11 +873,11 @@
           </label>
           <textarea
             rows="4"
-            placeholder="Descrição do presente"
+            id="descricaoPresente" maxlength="2000" placeholder="Descrição do presente"
             required
           ></textarea>
         </div>
-        <div class="modal-acoes">
+        <img id="previaPresente" alt="Prévia do presente" hidden><p id="presenteFormStatus" role="status" aria-live="polite"></p><div class="modal-acoes">
           <button
             class="botao-secundario"
             data-fechar-modal="modalPresente"
@@ -901,7 +889,7 @@
             class="botao-principal"
             type="submit"
           >
-            Adicionar
+            Salvar presente
           </button>
         </div>
       </form>
@@ -912,5 +900,6 @@
   <script src="admin.js"></script>
   <script src="admin-auth.js"></script>
   <script src="admin-cloud.js"></script>
+  <script src="admin-presentes.js"></script>
 </body>
 </html>

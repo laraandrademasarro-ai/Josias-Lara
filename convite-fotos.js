@@ -73,6 +73,18 @@
     }
     if (!payload.convite || !Array.isArray(payload.convite.pessoas) || !payload.fotos) throw new Error('Resposta inválida.');
     render(payload.fotos);
+    const gifts = document.getElementById('presentesConvite');
+    gifts.replaceChildren();
+    document.getElementById('presentesConviteStatus').textContent = payload.presentes == null
+      ? 'A lista de presentes estará disponível em breve.'
+      : payload.presentes.length ? '' : 'Em breve compartilharemos nossa lista de presentes.';
+    for (const gift of payload.presentes || []) {
+      const card = document.createElement('article'); card.className = 'presente-convite';
+      if (gift.foto_url) card.append(image(gift.foto_url, gift.nome));
+      const name = document.createElement('h3'); name.textContent = gift.nome;
+      const description = document.createElement('p'); description.textContent = gift.descricao;
+      card.append(name, description); gifts.append(card);
+    }
     clearTimeout(timer);
     timer = setTimeout(() => {
       window.carregarConvitePrivado().catch(() => {
