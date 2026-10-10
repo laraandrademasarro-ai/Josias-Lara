@@ -29,7 +29,9 @@
       if (fotos[key]?.[0]) container.append(image(fotos[key][0], alt));
     }
     for (const key of ['madrinhas', 'padrinhos']) {
-      const container = document.getElementById(key === 'madrinhas' ? 'imagemMadrinhas' : 'imagemPadrinhos').parentElement;
+      const reference = document.getElementById(key === 'madrinhas' ? 'imagemMadrinhas' : 'imagemPadrinhos');
+      if (!reference) continue; // O manual agora usa as artes completas do Canva.
+      const container = reference.parentElement;
       if (fotos[key]?.[0]) {
         const img = image(fotos[key][0], `Referência de traje para ${key}`);
         img.id = key === 'madrinhas' ? 'imagemMadrinhas' : 'imagemPadrinhos';
