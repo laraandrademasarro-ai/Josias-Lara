@@ -2983,3 +2983,20 @@ img {
 .foto-placeholder > .foto-salva-convite { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 .galeria-item > .foto-salva-convite { display:block; width:100%; height:100%; object-fit:cover; }
 .galeria-secao[hidden] { display:none; }
+
+/* Revisão dos convites — outubro de 2026. */
+#heroTipo { font-size:clamp(18px, 2.2vw, 24px); line-height:1.5; }
+#textoBoasVindas, #especialTexto { white-space:pre-line; }
+.evento-hora { font-size:clamp(20px, 2.6vw, 28px); line-height:1.5; }
+.info-especial strong { font-size:24px; }
+.info-especial span { font-size:16px; line-height:1.7; }
+.site[data-tipo="celebrante"] #especialMiniTitulo { font-size:17px; line-height:1.8; letter-spacing:normal; text-transform:none; }
+.site[data-tipo="celebrante"] #especialTitulo { font-size:clamp(30px, 4vw, 46px); line-height:1.2; }
+.evento-local a.botao-contorno { text-decoration:none; }
+#manualPadrinhos { padding:clamp(22px, 5vw, 70px) 16px; }
+.manual-artes { max-width:900px; margin:0 auto 24px; }
+.manual-artes summary { cursor:pointer; padding:18px 22px; border:1px solid #d9d0c1; border-radius:8px; color:var(--azul); font-family:"Cormorant Garamond",serif; font-size:clamp(25px, 4vw, 34px); }
+.manual-artes summary:focus-visible, .manual-paginas a:focus-visible { outline:3px solid var(--azul); outline-offset:4px; }
+.manual-paginas { display:grid; gap:18px; padding-top:20px; }
+.manual-paginas a { display:block; }
+.manual-paginas img { display:block; width:100%; height:auto; }
