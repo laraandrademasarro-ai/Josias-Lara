@@ -24,7 +24,13 @@
       const { error } = await supabase.from('casamento_convites_privados').upsert({
         id: convite.id, slug: convite.slug, token_hash, dados, atualizado_em: new Date().toISOString()
       }, { onConflict: 'id' });
-      if (error) throw new Error('Não foi possível sincronizar o convite. Confira o SQL complementar e as permissões do administrador.');
+      if (error) {
+        // A mensagem anterior escondia também conflitos de nomes e falhas de conexão.
+        // Não inclui details: esse campo pode conter o hash do código de acesso.
+        const code = error.code ? ` (${error.code})` : '';
+        const reason = error.message || 'O Supabase não informou o motivo.';
+        throw new Error(`Não foi possível sincronizar o convite${code}.\n\n${reason}`);
+      }
       return convite.acessoFotos;
     })();
     inflight.set(convite.id, task);
