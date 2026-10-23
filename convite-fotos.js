@@ -4,6 +4,38 @@
   const slug = new URLSearchParams(location.search).get('c');
   window.temAcessoConvite = Boolean(token);
   let timer;
+  let reservando = false;
+
+  async function escolherPresente(gift, button, label) {
+    if (reservando) return;
+    const cancelar = gift.minha_reserva;
+    if (!confirm(cancelar ? `Cancelar a reserva de "${gift.nome}"?` : `Reservar "${gift.nome}" para presentear Lara e Josias?`)) return;
+    reservando = true;
+    button.disabled = true;
+    label.textContent = 'Salvando sua escolha…';
+    try {
+      const response = await fetch(`${settings.url}/functions/v1/${settings.functionName}`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', apikey: settings.publishableKey },
+        body: JSON.stringify({ slug, token, action: cancelar ? 'cancelar' : 'reservar', presenteId: gift.id }),
+        cache: 'no-store', referrerPolicy: 'no-referrer', signal: AbortSignal.timeout(20000)
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.ok) {
+        if (response.status === 409) { gift.reservado = true; gift.minha_reserva = false; }
+        throw new Error(result.error || 'Não foi possível confirmar a reserva. Tente novamente.');
+      }
+      gift.reservado = result.reservado;
+      gift.minha_reserva = result.minha_reserva;
+      label.textContent = cancelar ? 'Reserva cancelada. O presente está disponível.' : 'Reservado por vocês. Obrigado pelo carinho!';
+    } catch (error) {
+      label.textContent = error.name === 'TimeoutError' || error.name === 'TypeError'
+        ? 'Não foi possível confirmar. Tente novamente ou recarregue a lista para conferir sua reserva.' : error.message;
+    } finally {
+      reservando = false;
+      button.disabled = gift.reservado && !gift.minha_reserva;
+      button.textContent = gift.minha_reserva ? 'Cancelar minha reserva' : gift.reservado ? 'Já reservado' : 'Escolher este presente';
+    }
+  }
   window.addEventListener('hashchange', () => location.reload());
 
   function image(url, alt) {
@@ -83,7 +115,13 @@
       if (gift.foto_url) card.append(image(gift.foto_url, gift.nome));
       const name = document.createElement('h3'); name.textContent = gift.nome;
       const description = document.createElement('p'); description.textContent = gift.descricao;
-      card.append(name, description); gifts.append(card);
+      const label = document.createElement('p'); label.className = 'reserva-status'; label.setAttribute('role', 'status');
+      label.textContent = gift.minha_reserva ? 'Reservado por vocês' : gift.reservado ? 'Este presente já foi escolhido.' : 'Disponível para escolher';
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'presente-reservar';
+      button.textContent = gift.minha_reserva ? 'Cancelar minha reserva' : gift.reservado ? 'Já reservado' : 'Escolher este presente';
+      button.disabled = Boolean(gift.reservado && !gift.minha_reserva);
+      button.onclick = () => escolherPresente(gift, button, label);
+      card.append(name, description, label, button); gifts.append(card);
     }
     clearTimeout(timer);
     timer = setTimeout(() => {

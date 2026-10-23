@@ -31,7 +31,7 @@
 
   <link
     rel="stylesheet"
-    href="convite.css"
+    href="convite.css?v=20261023-1"
   />
 </head>
 
@@ -83,111 +83,25 @@
       id="capa"
     >
 
-      <div class="capa-canto canto-1"></div>
-      <div class="capa-canto canto-2"></div>
-      <div class="capa-canto canto-3"></div>
-      <div class="capa-canto canto-4"></div>
-
-
-      <div class="capa-conteudo">
-
-
-        <div class="monograma-capa">
-
-          <span class="letra">
-            L
-          </span>
-
-          <span class="monograma-traco"></span>
-
-          <span class="letra">
-            J
-          </span>
-
+      <div class="capa-envelope-layout">
+        <div class="capa-noivos">
+          <p class="capa-legenda">Nosso casamento</p>
+          <h1><span>Lara</span><em>&amp;</em><span>Josias</span></h1>
+          <p class="capa-data-nova">06 de março de 2027</p>
+          <svg class="capa-ramo" viewBox="0 0 180 100" fill="none" stroke="currentColor" aria-hidden="true"><path d="M5 95Q70 70 165 8M45 77Q12 35 34 28Q56 39 45 77M78 59Q53 18 72 15Q91 27 78 59M108 39Q100 6 118 4Q129 18 108 39M55 73Q97 81 99 65Q90 53 55 73M121 31Q159 41 160 24Q144 16 121 31"/></svg>
         </div>
-
-
-        <h1>
-          Lara & Josias
-        </h1>
-
-
-        <div class="divisor-fino">
-
-          <span></span>
-
-          <i class="fa-solid fa-heart"></i>
-
-          <span></span>
-
-        </div>
-
-
-        <p
-          class="tipo-convite"
-          id="heroTipo"
-        >
-          Você é nosso convidado
-        </p>
-
-
-        <h2
-          id="nomeConviteHero"
-        >
-          Nosso convite
-        </h2>
-
-
-        <p
-          class="mensagem-capa"
-          id="mensagemHero"
-        >
-          Existem momentos que se tornam ainda mais especiais
-          quando compartilhados com pessoas queridas.
-        </p>
-
-
-        <div class="data-capa">
-
-          <div>
-            <strong>
-              06
-            </strong>
-
-            <span>
-              MAR
-            </span>
+        <div class="envelope-convite">
+          <div class="envelope-aba" aria-hidden="true"></div>
+          <div class="envelope-base" aria-hidden="true"></div>
+          <div class="cartao-convite">
+            <span class="cartao-ornamento" aria-hidden="true">❦</span>
+            <p class="tipo-convite" id="heroTipo">Temos um convite especial</p>
+            <h2 id="nomeConviteHero">Nosso convite</h2>
+            <span class="cartao-divisor" aria-hidden="true">◇</span>
+            <p class="mensagem-capa" id="mensagemHero">Existem momentos que se tornam ainda mais especiais quando compartilhados com pessoas queridas.</p>
+            <button class="abrir-convite" id="botaoEntrar" type="button"><span>Abrir convite</span><span aria-hidden="true">→</span></button>
           </div>
-
-
-          <div class="data-linha"></div>
-
-
-          <div>
-            <strong>
-              2027
-            </strong>
-
-            <span>
-              SÁBADO
-            </span>
-          </div>
-
         </div>
-
-
-        <button
-          class="abrir-convite"
-          id="botaoEntrar"
-          type="button"
-        >
-          <span>
-            Abrir convite
-          </span>
-
-          <i class="fa-solid fa-chevron-down"></i>
-        </button>
-
       </div>
 
     </section>
@@ -624,7 +538,7 @@
       </div>
 
 
-      <p id="presentesConviteStatus">A lista de presentes estará disponível em breve.</p><div id="presentesConvite" class="presentes-lista"></div></section>
+      <p id="presentesConviteStatus" role="status" aria-live="polite">A lista de presentes estará disponível em breve.</p><div id="presentesConvite" class="presentes-lista"></div></section>
 
 
 
@@ -793,8 +707,8 @@
 
 
   <script src="supabase-config.js"></script>
-  <script src="convite-fotos.js"></script>
-  <script src="convite.js"></script>
+  <script src="convite-fotos.js?v=20261023-1"></script>
+  <script src="convite.js?v=20261023-madrinha"></script>
 
 </body>
 </html>

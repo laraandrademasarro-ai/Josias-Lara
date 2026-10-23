@@ -3007,3 +3007,43 @@ img {
 .presente-convite h3 { font-family:"Cormorant Garamond",serif; color:var(--azul); font-size:28px; }
 .presente-convite p { font-size:16px; line-height:1.7; white-space:pre-line; }
 #presentesConviteStatus { text-align:center; }
+/* Capa em papel e envelope: organização independente dos demais capítulos. */
+.capa .capa-envelope-layout { width: min(1180px, 100%); display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 64px; align-items: center; position: relative; z-index: 1; }
+.capa .capa-noivos { position: relative; padding: 20px 0; }
+.capa .capa-legenda { text-transform: uppercase; letter-spacing: 6px; font-size: 12px; margin-bottom: 30px; color: var(--azul); }
+.capa .capa-noivos h1 { display: flex; flex-direction: column; align-items: flex-start; font-size: clamp(90px, 11vw, 158px); line-height: .82; font-weight: 500; }
+.capa .capa-noivos h1 em { color: var(--dourado); font-size: .55em; font-weight: 400; margin: 12px 0 12px 36%; }
+.capa .capa-data-nova { margin: 48px 0 0; padding-top: 22px; border-top: 1px solid var(--dourado); width: fit-content; font: 500 27px "Cormorant Garamond", serif; color: var(--azul); }
+.capa .capa-ramo { width: 170px; margin-top: 32px; color: var(--dourado); opacity: .65; }
+.capa .envelope-convite { position: relative; padding: 48px 28px 28px; isolation: isolate; min-width: 0; }
+.capa .envelope-aba { position: absolute; inset: 0 0 40%; background: #17334d; clip-path: polygon(50% 0,100% 65%,100% 100%,0 100%,0 65%); z-index: -2; border-radius: 16px; }
+.capa .envelope-base { position: absolute; inset: 33% 0 0; background: linear-gradient(145deg,#163853,#0b233b); box-shadow: 0 22px 30px #0b234226; z-index: -1; }
+.capa .envelope-base::after { content: ''; position: absolute; inset: 0; background: linear-gradient(30deg,transparent 49.8%,#ffffff12 50%,transparent 50.2%),linear-gradient(-30deg,transparent 49.8%,#ffffff12 50%,transparent 50.2%); }
+.capa .cartao-convite { background: #faf7f0; box-shadow: 0 6px 18px #0002; outline: 1px solid #b99b68; outline-offset: -20px; padding: 42px 38px; text-align: center; }
+.capa .cartao-ornamento { display: block; color: var(--dourado); font-size: 40px; margin-bottom: 18px; }
+.capa .cartao-convite .tipo-convite { font: 500 21px/1.4 "Cormorant Garamond",serif; letter-spacing: 1px; text-transform: none; margin: 0 0 24px; }
+.capa .cartao-convite h2 { font: 500 clamp(36px,4.5vw,62px)/1.05 "Cormorant Garamond",serif; color: var(--azul); margin: 0; overflow-wrap: anywhere; }
+.capa .cartao-divisor { display: block; margin: 24px auto; color: var(--dourado); }
+.capa .cartao-convite .mensagem-capa { font-size: 21px; line-height: 1.45; margin: 0 auto 28px; color: #68665f; }
+.capa .cartao-convite .abrir-convite { display: inline-flex; flex-direction: row; align-items: center; justify-content: center; gap: 18px; width: 100%; max-width: 280px; margin: 0 auto; border: 1px solid var(--azul); border-radius: 40px; padding: 18px 22px; background: var(--azul); color: #fff; font-size: 11px; letter-spacing: 2px; animation: none; }
+.capa .cartao-convite .abrir-convite:hover { background: #244462; }
+.capa .cartao-convite .abrir-convite span { font-size: 11px; letter-spacing: 2px; }
+.capa .abrir-convite:focus-visible, .presente-reservar:focus-visible { outline: 3px solid var(--dourado); outline-offset: 4px; }
+.presente-reservar { margin-top: 16px; padding: 12px 20px; border: 1px solid var(--azul); border-radius: 24px; background: var(--azul); color: white; cursor: pointer; min-height: 44px; }
+.presente-reservar:disabled { background: #e7e3db; color: #65615b; border-color: #d3cdc3; cursor: default; }
+.presente-convite .reserva-status { color: var(--azul); font-size: 16px; margin-top: 16px; }
+@media (max-width: 760px) {
+  .capa .capa-envelope-layout { grid-template-columns: 1fr; gap: 14px; max-width: 500px; }
+  .capa .capa-noivos { text-align: center; padding: 0; }
+  .capa .capa-legenda { margin: 0 0 18px; font-size: 10px; letter-spacing: 4px; }
+  .capa .capa-noivos h1 { flex-direction: row; justify-content: center; align-items: baseline; gap: 10px; font-size: clamp(44px,10vw,68px); }
+  .capa .capa-noivos h1 em { margin: 0; font-size: .65em; }
+  .capa .capa-data-nova { margin: 18px auto 0; padding-top: 12px; font-size: 23px; }
+  .capa .capa-ramo { display: none; }
+  .capa .envelope-convite { padding: 34px 14px 18px; }
+  .capa .cartao-convite { padding: 28px 25px; outline-offset: -10px; }
+  .capa .cartao-ornamento { font-size: 28px; margin-bottom: 12px; }
+  .capa .cartao-convite .tipo-convite { font-size: 19px; margin-bottom: 18px; }
+  .capa .cartao-convite .mensagem-capa { font-size: 19px; margin-bottom: 22px; }
+  .capa .cartao-divisor { margin: 18px auto; }
+}

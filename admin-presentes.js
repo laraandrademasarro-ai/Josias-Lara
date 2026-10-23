@@ -36,6 +36,9 @@
       const title = document.createElement('h3'); title.textContent = row.nome;
       const description = document.createElement('p'); description.textContent = row.descricao;
       card.append(title, description);
+      const reservation = document.createElement('p');
+      reservation.textContent = row.reservado_por ? 'Reservado por: ' + (row.reserva_nome || 'convidado') : 'Disponível';
+      card.append(reservation);
       for (const [label, action] of [['Editar', () => open(row)], ['Excluir', () => remove(row)]]) {
         const button = document.createElement('button'); button.type = 'button'; button.className = 'botao-secundario'; button.textContent = label; button.disabled = busy; button.onclick = action; card.append(button);
       }
@@ -56,6 +59,14 @@
       for (const row of data) {
         const signed = await c.client.storage.from(c.bucket).createSignedUrl(row.foto_path, 3600);
         row.url = signed.data?.signedUrl || null;
+      }
+      const ids = [...new Set(data.map(row => row.reservado_por).filter(Boolean))];
+      for (let start = 0; start < ids.length; start += 100) {
+        const invites = await c.client.from('casamento_convites_privados').select('id,dados').in('id', ids.slice(start, start + 100));
+        if (!invites.error) for (const row of data) {
+          const invite = invites.data.find(item => item.id === row.reservado_por);
+          if (invite) row.reserva_nome = invite.dados.nome;
+        }
       }
       if (revision !== generation) return;
       rows = data; render(); say('Presentes atualizados.');

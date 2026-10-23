@@ -151,6 +151,9 @@ function carregarConvite() {
     "";
 
   switch (convite.tipo) {
+    case "madrinha":
+      configurarMadrinha();
+      break;
     case "padrinhos":
       configurarPadrinhos();
       break;
@@ -193,9 +196,13 @@ function configurarComum() {
    PADRINHOS
 ========================================= */
 
-function configurarPadrinhos() {
-  for (const [folder, count, id, label] of [['padrinhos', 7, 'artesPadrinhos', 'Manual dos padrinhos'], ['madrinhas', 6, 'artesMadrinhas', 'Manual das madrinhas']]) {
+function configurarPadrinhos(individual = false) {
+  const manuais = [['padrinhos', 7, 'artesPadrinhos', 'Manual dos padrinhos'], ['madrinhas', 6, 'artesMadrinhas', 'Manual das madrinhas']];
+  for (const [folder, count, id, label] of manuais) {
     const container = document.getElementById(id);
+    container.parentElement.hidden = individual && folder === 'padrinhos';
+    if (individual && folder === 'padrinhos') continue;
+    if (individual) container.parentElement.open = true;
     if (container.children.length) continue;
     for (let page = 1; page <= count; page++) {
       const link = document.createElement('a');
@@ -223,6 +230,15 @@ function configurarPadrinhos() {
   );
 }
 
+
+function configurarMadrinha() {
+  configurarPadrinhos(true);
+  manualPadrinhos.setAttribute('aria-label', 'Manual da madrinha');
+  heroTipo.textContent = 'Um convite especial para você';
+  if (!convite.mensagem) mensagemHero.textContent = 'Existem pessoas que tornam a nossa história ainda mais especial. Você é uma delas.';
+  tituloBoasVindas.textContent = 'Aceita ser nossa madrinha?';
+  textoBoasVindas.textContent = 'Você faz parte da nossa história e queremos ter você ao nosso lado em um dos dias mais especiais das nossas vidas.\n\nSerá uma alegria ter você como nossa madrinha, compartilhando conosco o amor, a fé e a emoção do nosso “sim”!';
+}
 
 /* =========================================
    PAIS

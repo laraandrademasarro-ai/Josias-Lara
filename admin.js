@@ -406,6 +406,7 @@ function formatarTipo(tipo) {
   const tipos = {
     comum: "Comum",
     padrinhos: "Padrinhos",
+    madrinha: "Madrinha (individual)",
     pais: "Pais",
     celebrante: "Celebrante"
   };
@@ -413,7 +414,7 @@ function formatarTipo(tipo) {
 }
 function classeTipo(tipo) {
   if (
-    tipo === "padrinhos"
+    tipo === "padrinhos" || tipo === "madrinha"
   ) {
     return "padrinhos";
   }

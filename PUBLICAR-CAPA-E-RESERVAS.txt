@@ -1,0 +1,41 @@
+ATUALIZAÇÃO: CAPA COM ENVELOPE E RESERVA DE PRESENTES
+
+1. SUPABASE / SQL EDITOR
+Abra supabase/04-reservas-presentes.sql, copie tudo e execute no SQL Editor.
+Não precisa substituir e-mail. O SQL acrescenta a reserva à tabela de presentes existente.
+
+2. SUPABASE / EDGE FUNCTIONS
+Abra a função smooth-processor > Code.
+Substitua o código pelo conteúdo completo de supabase/functions/convite-privado/index.ts.
+Clique em Deploy updates. Mantenha Verify JWT desativado: a função valida o código privado do convite.
+
+3. GITHUB
+Use sempre os arquivos da pasta principal do projeto.
+Envie estes sete arquivos à raiz do repositório, substituindo os existentes:
+convite.html
+convite.css
+convite.js
+convite-fotos.js
+admin.html
+admin.js
+admin-presentes.js
+Clique em Commit changes e aguarde a publicação.
+As cópias e ZIPs antigos foram guardados em backups/pacotes-antigos-20261023.
+Não use esses pacotes para atualizar o site: eles podem conter versões anteriores.
+Mantenha também os outros arquivos do site e a pasta assets que já estão no GitHub.
+O tipo Madrinha (individual) está incluído nesta atualização.
+
+4. CONFERÊNCIA
+Abra um link completo de convidado. Na lista, clique em Escolher este presente e confirme.
+Em outro convite, o mesmo item deve aparecer Já reservado (recarregue para atualizar).
+No convite original, a opção Cancelar minha reserva libera o item novamente.
+No painel, entre com o administrador e atualize a lista de presentes para ver quem reservou.
+
+A reserva pertence ao convite: pessoas que compartilham o mesmo link compartilham a escolha.
+É possível escolher mais de um presente. Não há pagamento nesta seleção.
+Uma página aberta pode mostrar disponibilidade antiga, mas o servidor impede reserva duplicada.
+As fotos continuam privadas. Outros convidados não recebem o nome de quem reservou.
+
+Validação local: cinco tipos de convite, celular, cadastro de presentes e fluxo de reserva
+testados com banco simulado. A conexão Supabase recusou acesso ao projeto nesta sessão;
+a aplicação e a conferência no banco real devem ser feitas pelo painel.
