@@ -674,50 +674,15 @@ setInterval(
 ========================================= */
 
 function configurarMusica() {
-  const musica =
-    convite.musica?.trim();
-
-  if (!musica) {
-    controleMusica.dataset.youtube = 'lLtvX2JHqno';
-    controleMusica.classList.add('ativo');
-    controleMusica.setAttribute('aria-label', 'Ouvir música');
-    controleMusica.setAttribute('aria-expanded', 'false');
-    controleMusica.setAttribute('aria-controls', 'musicaYoutube');
-    iconeMusica.className = 'fa-solid fa-music';
-    return;
-  }
-
-  if (/^https:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(musica)) {
-    const url = new URL(musica);
-    const video = url.hostname === 'youtu.be' ? url.pathname.slice(1) : url.searchParams.get('v');
-    controleMusica.dataset.youtube = /^[\w-]{11}$/.test(video || '') ? video : 'lLtvX2JHqno';
-    controleMusica.classList.add('ativo');
-    controleMusica.setAttribute('aria-label', 'Ouvir música');
-    iconeMusica.className = 'fa-solid fa-music';
-    return;
-  }
-
-  audioConvite.src =
-    musica;
-
-  controleMusica.classList.add(
-    "ativo"
-  );
+  audioConvite.src = 'assets/musicas/musicalara.mp3';
+  audioConvite.volume = 0.3;
+  controleMusica.classList.add('ativo');
+  atualizarIconeMusica();
 }
-
 
 controleMusica?.addEventListener(
   "click",
   async () => {
-    if (controleMusica.dataset.youtube) {
-      const panel = document.getElementById('musicaYoutube');
-      if (!panel.hidden) { fecharMusicaYoutube(); return; }
-      panel.hidden = false;
-      document.getElementById('playerMusicaYoutube').src = 'https://www.youtube-nocookie.com/embed/' + controleMusica.dataset.youtube + '?playsinline=1&rel=0';
-      controleMusica.setAttribute('aria-expanded', 'true');
-      document.getElementById('fecharMusicaYoutube').focus();
-      return;
-    }
     if (
       !audioConvite.src
     ) {
@@ -742,18 +707,6 @@ controleMusica?.addEventListener(
   }
 );
 
-function fecharMusicaYoutube() {
-  document.getElementById('playerMusicaYoutube').removeAttribute('src');
-  document.getElementById('musicaYoutube').hidden = true;
-  controleMusica.setAttribute('aria-expanded', 'false');
-  controleMusica.focus();
-}
-document.getElementById('fecharMusicaYoutube').addEventListener('click', fecharMusicaYoutube);
-document.getElementById('musicaYoutube').addEventListener('keydown', event => {
-  if (event.key === 'Escape') fecharMusicaYoutube();
-});
-
-
 audioConvite?.addEventListener(
   "play",
   atualizarIconeMusica
@@ -767,6 +720,8 @@ audioConvite?.addEventListener(
 
 
 function atualizarIconeMusica() {
+  controleMusica.setAttribute('aria-label', audioConvite.paused ? 'Tocar música' : 'Pausar música');
+  controleMusica.setAttribute('aria-pressed', String(!audioConvite.paused));
   if (
     audioConvite.paused
   ) {
