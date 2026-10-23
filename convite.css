@@ -2994,11 +2994,11 @@ img {
 .site[data-tipo="celebrante"] #especialTitulo { font-size:clamp(30px, 4vw, 46px); line-height:1.2; }
 .evento-local a.botao-contorno { text-decoration:none; }
 #manualPadrinhos { padding:clamp(22px, 5vw, 70px) 16px; }
-.manual-artes { max-width:900px; margin:0 auto 24px; }
+.manual-artes { max-width:640px; margin:0 auto 24px; }
 .manual-artes summary { cursor:pointer; padding:18px 22px; border:1px solid #d9d0c1; border-radius:8px; color:var(--azul); font-family:"Cormorant Garamond",serif; font-size:clamp(25px, 4vw, 34px); }
 .manual-artes summary:focus-visible, .manual-paginas a:focus-visible { outline:3px solid var(--azul); outline-offset:4px; }
 .manual-paginas { display:grid; gap:18px; padding-top:20px; }
-.manual-paginas a { display:block; }
+.manual-paginas a { display:block; width:min(100%, 600px, 80svh); margin-inline:auto; }
 .manual-paginas img { display:block; width:100%; height:auto; }
 
 .presentes-lista { max-width:1100px; margin:auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px; }
