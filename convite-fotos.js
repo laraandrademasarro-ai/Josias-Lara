@@ -6,17 +6,33 @@
   let timer;
   let reservando = false;
 
+  function tituloOpcao(g) {
+    if (g.inteiro) return g.minha_reserva ? 'Cancelar reserva do presente inteiro' : g.reservado ? 'Presente inteiro já reservado' : 'Dar o presente inteiro';
+    if (g.cota_ilimitada) return g.minha_reserva ? 'Cancelar minha cota' : 'Contribuir com uma cota';
+    return g.minha_reserva ? 'Cancelar minha reserva' : g.reservado ? 'Já reservado' : 'Escolher este presente';
+  }
+  function statusOpcao(g) {
+    if (g.inteiro) return g.minha_reserva ? 'Vocês escolheram o presente inteiro.' : g.reservado ? 'O presente inteiro já foi escolhido.' : 'Presente inteiro disponível.';
+    if (g.cota_ilimitada) return g.minha_reserva ? 'Vocês escolheram uma cota.' : 'Cotas ilimitadas: todos podem participar.';
+    return g.minha_reserva ? 'Reservado por vocês' : g.reservado ? 'Este presente já foi escolhido.' : 'Disponível para escolher';
+  }
+  function adicionarOpcao(card, g) {
+    const label = document.createElement('p'); label.className = 'reserva-status'; label.setAttribute('role','status'); label.textContent = statusOpcao(g);
+    const button = document.createElement('button'); button.className = 'presente-reservar'; button.type='button'; button.textContent=tituloOpcao(g);
+    button.disabled = Boolean(g.reservado && !g.minha_reserva); button.onclick=()=>escolherPresente(g,button,label); card.append(label,button);
+  }
   async function escolherPresente(gift, button, label) {
     if (reservando) return;
     const cancelar = gift.minha_reserva;
-    if (!confirm(cancelar ? `Cancelar a reserva de "${gift.nome}"?` : `Reservar "${gift.nome}" para presentear Lara e Josias?`)) return;
+    const opcao = gift.inteiro ? 'o presente inteiro' : gift.cota_ilimitada ? 'uma cota' : 'o presente';
+    if (!confirm((cancelar ? 'Cancelar sua escolha' : 'Escolher ' + opcao) + ': ' + gift.nome + '?')) return;
     reservando = true;
     button.disabled = true;
     label.textContent = 'Salvando sua escolha…';
     try {
       const response = await fetch(`${settings.url}/functions/v1/${settings.functionName}`, {
         method: 'POST', headers: { 'Content-Type': 'application/json', apikey: settings.publishableKey },
-        body: JSON.stringify({ slug, token, action: cancelar ? 'cancelar' : 'reservar', presenteId: gift.id }),
+        body: JSON.stringify({ slug, token, action: (cancelar ? 'cancelar' : 'reservar') + (gift.inteiro ? '_inteiro' : ''), presenteId: gift.id }),
         cache: 'no-store', referrerPolicy: 'no-referrer', signal: AbortSignal.timeout(20000)
       });
       const result = await response.json().catch(() => ({}));
@@ -26,14 +42,14 @@
       }
       gift.reservado = result.reservado;
       gift.minha_reserva = result.minha_reserva;
-      label.textContent = cancelar ? 'Reserva cancelada. O presente está disponível.' : 'Reservado por vocês. Obrigado pelo carinho!';
+      label.textContent = statusOpcao(gift);
     } catch (error) {
       label.textContent = error.name === 'TimeoutError' || error.name === 'TypeError'
         ? 'Não foi possível confirmar. Tente novamente ou recarregue a lista para conferir sua reserva.' : error.message;
     } finally {
       reservando = false;
       button.disabled = gift.reservado && !gift.minha_reserva;
-      button.textContent = gift.minha_reserva ? 'Cancelar minha reserva' : gift.reservado ? 'Já reservado' : gift.cota_ilimitada ? 'Escolher esta cota' : 'Escolher este presente';
+      button.textContent = tituloOpcao(gift);
     }
   }
   window.addEventListener('hashchange', () => location.reload());
@@ -115,13 +131,12 @@
       if (gift.foto_url) card.append(image(gift.foto_url, gift.nome));
       const name = document.createElement('h3'); name.textContent = gift.nome;
       const description = document.createElement('p'); description.textContent = gift.descricao;
-      const label = document.createElement('p'); label.className = 'reserva-status'; label.setAttribute('role', 'status');
-      label.textContent = gift.minha_reserva ? 'Reservado por vocês' : gift.reservado ? 'Este presente já foi escolhido.' : gift.cota_ilimitada ? 'Cota ilimitada: outros convidados também podem participar.' : 'Disponível para escolher';
-      const button = document.createElement('button'); button.type = 'button'; button.className = 'presente-reservar';
-      button.textContent = gift.minha_reserva ? 'Cancelar minha reserva' : gift.reservado ? 'Já reservado' : gift.cota_ilimitada ? 'Escolher esta cota' : 'Escolher este presente';
-      button.disabled = Boolean(gift.reservado && !gift.minha_reserva);
-      button.onclick = () => escolherPresente(gift, button, label);
-      card.append(name, description, label, button); gifts.append(card);
+      card.append(name, description);
+      adicionarOpcao(card, gift);
+      if (gift.cota_ilimitada && typeof gift.inteiro_reservado === 'boolean') {
+        adicionarOpcao(card, {id:gift.id, nome:gift.nome, inteiro:true, reservado:gift.inteiro_reservado, minha_reserva:gift.meu_inteiro});
+      }
+      gifts.append(card);
     }
     clearTimeout(timer);
     timer = setTimeout(() => {
