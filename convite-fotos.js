@@ -33,7 +33,7 @@
     } finally {
       reservando = false;
       button.disabled = gift.reservado && !gift.minha_reserva;
-      button.textContent = gift.minha_reserva ? 'Cancelar minha reserva' : gift.reservado ? 'Já reservado' : 'Escolher este presente';
+      button.textContent = gift.minha_reserva ? 'Cancelar minha reserva' : gift.reservado ? 'Já reservado' : gift.cota_ilimitada ? 'Escolher esta cota' : 'Escolher este presente';
     }
   }
   window.addEventListener('hashchange', () => location.reload());
@@ -116,9 +116,9 @@
       const name = document.createElement('h3'); name.textContent = gift.nome;
       const description = document.createElement('p'); description.textContent = gift.descricao;
       const label = document.createElement('p'); label.className = 'reserva-status'; label.setAttribute('role', 'status');
-      label.textContent = gift.minha_reserva ? 'Reservado por vocês' : gift.reservado ? 'Este presente já foi escolhido.' : 'Disponível para escolher';
+      label.textContent = gift.minha_reserva ? 'Reservado por vocês' : gift.reservado ? 'Este presente já foi escolhido.' : gift.cota_ilimitada ? 'Cota ilimitada: outros convidados também podem participar.' : 'Disponível para escolher';
       const button = document.createElement('button'); button.type = 'button'; button.className = 'presente-reservar';
-      button.textContent = gift.minha_reserva ? 'Cancelar minha reserva' : gift.reservado ? 'Já reservado' : 'Escolher este presente';
+      button.textContent = gift.minha_reserva ? 'Cancelar minha reserva' : gift.reservado ? 'Já reservado' : gift.cota_ilimitada ? 'Escolher esta cota' : 'Escolher este presente';
       button.disabled = Boolean(gift.reservado && !gift.minha_reserva);
       button.onclick = () => escolherPresente(gift, button, label);
       card.append(name, description, label, button); gifts.append(card);

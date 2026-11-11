@@ -22,6 +22,7 @@
     document.getElementById('tituloPresente').textContent = row ? 'Editar presente' : 'Adicionar presente';
     document.getElementById('nomePresente').value = row?.nome || '';
     document.getElementById('descricaoPresente').value = row?.descricao || '';
+    document.getElementById('cotaIlimitada').checked = Boolean(row?.cota_ilimitada);
     file.required = !row;
     if (row?.url) { preview.src = row.url; preview.hidden = false; }
     document.getElementById('presenteFormStatus').textContent = '';
@@ -38,6 +39,11 @@
       card.append(title, description);
       const reservation = document.createElement('p');
       reservation.textContent = row.reservado_por ? 'Reservado por: ' + (row.reserva_nome || 'convidado') : 'Disponível';
+      if (row.cota_ilimitada) {
+        const nomes = (row.escolhas || []).map(escolha => escolha.convite?.dados?.nome || 'Convidado');
+        if (row.reservado_por) nomes.unshift(row.reserva_nome || 'Convidado');
+        reservation.textContent = 'Cota ilimitada' + (nomes.length ? ' · Escolhida por: ' + nomes.join(', ') : ' · Nenhuma escolha ainda');
+      }
       card.append(reservation);
       for (const [label, action] of [['Editar', () => open(row)], ['Excluir', () => remove(row)]]) {
         const button = document.createElement('button'); button.type = 'button'; button.className = 'botao-secundario'; button.textContent = label; button.disabled = busy; button.onclick = action; card.append(button);
@@ -52,7 +58,7 @@
       const c = config(); lock(true); say('Carregando presentes…');
       const data = [];
       for (let start = 0; ; start += 100) {
-        const result = await c.client.from('casamento_presentes').select('*').order('criado_em', { ascending: true }).order('id').range(start, start + 99);
+        const result = await c.client.from('casamento_presentes').select('*,escolhas:casamento_escolhas_cota(convite:casamento_convites_privados(dados))').order('criado_em', { ascending: true }).order('id').range(start, start + 99);
         if (result.error) throw new Error('Não foi possível carregar os presentes. Execute o SQL dos presentes e confira suas permissões.');
         data.push(...result.data); if (result.data.length < 100) break;
       }
@@ -98,7 +104,7 @@
         const uploaded = await c.client.storage.from(c.bucket).upload(path, image, { contentType:image.type, upsert:false });
         if (uploaded.error) { path = null; throw new Error('Não foi possível enviar a foto. Confira as permissões do administrador.'); }
       }
-      const payload = { nome, descricao, foto_path:path || old.foto_path };
+      const payload = { nome, descricao, cota_ilimitada: document.getElementById('cotaIlimitada').checked, foto_path:path || old.foto_path };
       const table = c.client.from('casamento_presentes');
       const result = old ? await table.update(payload).eq('id', old.id).select('id') : await table.insert(payload).select('id');
       if (result.error || !result.data?.length) throw new Error('Não foi possível salvar o cadastro. Execute o SQL dos presentes e confira suas permissões.');
