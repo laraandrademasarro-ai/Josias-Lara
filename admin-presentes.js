@@ -150,3 +150,45 @@
   });
   render(); say('Entre em Fotos com o administrador e clique em Atualizar presentes.');
 })();
+
+(() => {
+  const input = document.getElementById('adminChavePix');
+  const save = document.getElementById('salvarPix');
+  const status = document.getElementById('pixStatus');
+  let revision = 0, saved = '';
+  function lock(value) { input.disabled = save.disabled = value; }
+  async function refresh() {
+    const current = ++revision;
+    lock(true); saved = input.value = '';
+    const client = window.CASAMENTO_FOTOS?.client;
+    if (!client) { status.textContent = 'Entre em Fotos com o administrador para cadastrar a chave.'; return; }
+    status.textContent = 'Carregando chave…';
+    try {
+      const {data,error} = await client.from('casamento_pix').select('chave').eq('id',1).single();
+      if (current !== revision) return;
+      if (error || !data || typeof data.chave !== 'string') throw Error();
+      saved = input.value = data.chave;
+      status.textContent = saved ? 'Chave cadastrada.' : 'Nenhuma chave cadastrada.';
+      lock(false);
+    } catch { if (current === revision) status.textContent = 'Não foi possível carregar a chave. Confira o SQL 07 e a conta do administrador.'; }
+  }
+  document.getElementById('formPix').addEventListener('submit',async e => {
+    e.preventDefault();
+    if (save.disabled) return;
+    const chave = input.value.trim(), current = revision;
+    if (/\s/.test(chave)) { status.textContent = 'Digite a chave sem espaços.'; return; }
+    if (!chave && saved && !confirm('Remover a chave Pix dos convites?')) return;
+    lock(true);
+    try {
+      const {data,error} = await window.CASAMENTO_FOTOS.client.from('casamento_pix').update({chave}).eq('id',1).select('chave').single();
+      if (current !== revision) return;
+      if (error || data?.chave !== chave) throw Error();
+      saved = input.value = chave;
+      status.textContent = chave ? 'Chave Pix salva.' : 'Chave Pix removida.';
+    } catch { if (current === revision) status.textContent = 'Não foi possível confirmar o salvamento. Confira a conexão e tente novamente.'; }
+    finally { if (current === revision) lock(false); }
+  });
+  window.addEventListener('casamento:fotos-auth',refresh);
+  document.getElementById('atualizarPresentes').addEventListener('click',refresh);
+  refresh();
+})();

@@ -121,6 +121,17 @@
     }
     if (!payload.convite || !Array.isArray(payload.convite.pessoas) || !payload.fotos) throw new Error('Resposta inválida.');
     render(payload.fotos);
+    const box = document.getElementById('pixConvite');
+    const key = typeof payload.pix === 'string' ? payload.pix.trim() : '';
+    box.hidden = !key;
+    document.getElementById('pixValor').textContent = key;
+    document.getElementById('pixCopiaStatus').textContent = '';
+    document.getElementById('copiarPix').onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(key);
+        document.getElementById('pixCopiaStatus').textContent = 'Chave Pix copiada.';
+      } catch { document.getElementById('pixCopiaStatus').textContent = 'Selecione a chave acima e copie manualmente.'; }
+    };
     const gifts = document.getElementById('presentesConvite');
     gifts.replaceChildren();
     document.getElementById('presentesConviteStatus').textContent = payload.presentes == null
