@@ -124,6 +124,9 @@
     const box = document.getElementById('pixConvite');
     const key = typeof payload.pix === 'string' ? payload.pix.trim() : '';
     box.hidden = !key;
+    const titular = document.getElementById('pixTitular');
+    titular.textContent = key && payload.pixTitular ? 'Titular: ' + payload.pixTitular : '';
+    titular.hidden = !titular.textContent;
     document.getElementById('pixValor').textContent = key;
     document.getElementById('pixCopiaStatus').textContent = '';
     document.getElementById('copiarPix').onclick = async () => {
