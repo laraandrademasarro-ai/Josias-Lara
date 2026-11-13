@@ -1112,3 +1112,9 @@ select {
 .rsvp-grupo li strong { color:#102a46; font-size:15px; }
 .rsvp-grupo li small { color:#526273; font-size:13px; }
 @media(max-width:620px){ #presencasGrupos { grid-template-columns:1fr; gap:10px; } }
+.por-convite .rsvp-legenda {display:block;padding:16px 17px 0;color:#65593f;font-size:12px;}
+.por-convite h3 {background:white;color:#102a46;padding:5px 17px 14px;border-bottom:1px solid #eee8de;}
+.por-convite li {display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.por-convite li small {flex-shrink:0;border-radius:20px;padding:4px 9px;font-size:12px;background:#f7efd9;color:#67501e;}
+.por-convite li [data-resposta="confirmado"] {background:#e9f2ed;color:#305c4a;}
+.por-convite li [data-resposta="nao_vai"] {background:#f6ece9;color:#804740;}
