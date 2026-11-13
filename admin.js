@@ -216,6 +216,7 @@ let convites =
     )
   ) || [];
 function salvarConvites() {
+  window.relerPresencas?.();
   localStorage.setItem(
     "convitesCasamento",
     JSON.stringify(convites)
@@ -1458,12 +1459,18 @@ function criarSlugUnico(nome) {
     if(!client){notice.textContent='Entre em Fotos com o administrador para ver as respostas.';return}
     notice.textContent='Carregando confirmações…';
     try{
-      const rows=[];
-      for(let i=0;;i+=200){
-        const {data,error}=await client.from('casamento_relatorio_presencas').select('convite_id,pessoa_id,convite_nome,nome,status').order('convite_id').order('pessoa_id').range(i,i+199);
-        if(version!==generation)return;
-        if(error)throw error;
-        rows.push(...data);if(data.length<200)break;
+      const rows=convites.flatMap(c=>(c.pessoas||[]).map(p=>({convite_id:c.id,pessoa_id:p.id,convite_nome:c.nome,nome:p.nome,status:'pendente'})));
+      const key=(c,p)=>JSON.stringify([String(c),String(p)]);
+      const local=new Map(rows.map(r=>[key(r.convite_id,r.pessoa_id),r]));
+      const ids=[...new Set(rows.map(r=>r.convite_id))];
+      for(let start=0;start<ids.length;start+=50){
+        for(let i=0;;i+=200){
+          const {data,error}=await client.from('casamento_relatorio_presencas').select('convite_id,pessoa_id,status').in('convite_id',ids.slice(start,start+50)).order('convite_id').order('pessoa_id').range(i,i+199);
+          if(version!==generation)return;
+          if(error)throw error;
+          for(const r of data){const person=local.get(key(r.convite_id,r.pessoa_id));if(person && Object.hasOwn(names,r.status))person.status=r.status;}
+          if(data.length<200)break;
+        }
       }
       for(const [estado,titulo] of Object.entries(names)){
         const subset=rows.filter(r=>r.status===estado).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
@@ -1473,11 +1480,11 @@ function criarSlugUnico(nome) {
         for(const r of subset){const p=document.createElement('p');p.textContent=r.nome+' · '+r.convite_nome;box.append(p)}
         panel.append(box);
       }
-      notice.textContent=rows.length?'Lista atualizada.':'Nenhuma pessoa em convites publicados.';
+      notice.textContent=rows.length?rows.length+' pessoa(s) nos convites deste navegador.':'Nenhuma pessoa na aba Convites deste navegador.';
       window.atualizarResumoPresencas();
     }catch{if(version===generation)notice.textContent='Não foi possível carregar as respostas. Confira sua conexão, o login e o SQL 09.'}
   }
   document.getElementById('lerPresencas').onclick=load;
   document.querySelector('[data-page="confirmacoes"]').addEventListener('click',load);
-  window.addEventListener('casamento:fotos-auth',load);load();
+  window.addEventListener('casamento:fotos-auth',load);window.relerPresencas=load;load();
 })();
