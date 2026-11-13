@@ -17,8 +17,8 @@
     return g.minha_reserva ? 'Reservado por vocês' : g.reservado ? 'Este presente já foi escolhido.' : 'Disponível para escolher';
   }
   function adicionarOpcao(card, g) {
-    const label = document.createElement('p'); label.className = 'reserva-status'; label.setAttribute('role','status'); label.textContent = statusOpcao(g);
-    const button = document.createElement('button'); button.className = 'presente-reservar'; button.type='button'; button.textContent=tituloOpcao(g);
+    const label = document.createElement('p'); label.className = 'reserva-status'; label.setAttribute('role','status'); label.textContent = g.inteiro || g.cota_ilimitada ? '' : statusOpcao(g);
+    const button = document.createElement('button'); button.className = g.inteiro ? 'presente-reservar opcao-inteiro' : 'presente-reservar'; button.type='button'; button.textContent=tituloOpcao(g);
     button.disabled = Boolean(g.reservado && !g.minha_reserva); button.onclick=()=>escolherPresente(g,button,label); card.append(label,button);
   }
   async function escolherPresente(gift, button, label) {
@@ -42,7 +42,7 @@
       }
       gift.reservado = result.reservado;
       gift.minha_reserva = result.minha_reserva;
-      label.textContent = statusOpcao(gift);
+      label.textContent = gift.inteiro || gift.cota_ilimitada ? '' : statusOpcao(gift);
     } catch (error) {
       label.textContent = error.name === 'TimeoutError' || error.name === 'TypeError'
         ? 'Não foi possível confirmar. Tente novamente ou recarregue a lista para conferir sua reserva.' : error.message;
@@ -145,10 +145,11 @@
       if (gift.foto_url) card.append(image(gift.foto_url, gift.nome));
       const name = document.createElement('h3'); name.textContent = gift.nome;
       const description = document.createElement('p'); description.textContent = gift.descricao;
-      card.append(name, description);
-      adicionarOpcao(card, gift);
+      card.append(name); if (!gift.cota_ilimitada) card.append(description);
+      const acoes = document.createElement('div'); acoes.className = 'presente-acoes'; card.append(acoes);
+      adicionarOpcao(acoes, gift);
       if (gift.cota_ilimitada && typeof gift.inteiro_reservado === 'boolean') {
-        adicionarOpcao(card, {id:gift.id, nome:gift.nome, inteiro:true, reservado:gift.inteiro_reservado, minha_reserva:gift.meu_inteiro});
+        adicionarOpcao(acoes, {id:gift.id, nome:gift.nome, inteiro:true, reservado:gift.inteiro_reservado, minha_reserva:gift.meu_inteiro});
       }
       gifts.append(card);
     }
