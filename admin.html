@@ -201,7 +201,7 @@
                 <i class="fa-regular fa-circle-check"></i>
               </div>
             </div>
-            <strong>
+            <strong id="totalConfirmadosOnline">
               0
             </strong>
             <small>
@@ -229,7 +229,7 @@
                 <i class="fa-solid fa-user-xmark"></i>
               </div>
             </div>
-            <strong>
+            <strong id="totalNaoOnline">
               0
             </strong>
             <small>
@@ -460,21 +460,12 @@
               Confirmações
             </h1>
             <p>
-              Aqui veremos as respostas dos convidados.
+              Respostas individuais dos convites publicados.
             </p>
           </div>
         </div>
-        <div class="placeholder">
-          <i class="fa-regular fa-circle-check"></i>
-          <h2>
-            Confirmações de presença
-          </h2>
-          <p>
-            Essa área será ligada ao Supabase depois.
-            Cada pessoa poderá responder individualmente
-            se irá ou não ao casamento.
-          </p>
-        </div>
+        <button type="button" class="botao-secundario" id="lerPresencas">Atualizar confirmações</button>
+        <p id="presencasAviso" role="status"></p><div id="presencasGrupos"></div>
       </section>
       <!-- =========================
            PRESENTES
@@ -908,7 +899,7 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="supabase-config.js"></script>
-  <script src="admin.js?v=20261023-madrinha"></script>
+  <script src="admin.js?v=presencas-1"></script>
   <script src="admin-auth.js"></script>
   <script src="admin-cloud.js?v=20261010-3"></script>
   <script src="admin-presentes.js?v=pix-2"></script>

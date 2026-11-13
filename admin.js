@@ -314,12 +314,13 @@ function criarSlug(texto) {
    PESSOAS DO CONVITE
 ========================================= */
 function adicionarCampoPessoa(
-  nome = ""
+  nome = "", id = ""
 ) {
   const linha =
     document.createElement(
       "div"
     );
+  linha.dataset.pessoaId = id;
   linha.className =
     "pessoa-form";
   linha.innerHTML = `
@@ -379,7 +380,7 @@ function pegarPessoasFormulario() {
         input.value.trim();
       if (nome) {
         pessoas.push({
-          id: gerarId(),
+          id: input.closest('.pessoa-form').dataset.pessoaId || gerarId(),
           nome,
           status: "pendente"
         });
@@ -521,10 +522,7 @@ formConvite
                 const antiga =
                   pessoasAntigas.find(
                     (item) =>
-                      item.nome
-                        .toLowerCase() ===
-                      pessoa.nome
-                        .toLowerCase()
+                      item.id === pessoa.id
                   );
                 if (antiga) {
                   return {
@@ -606,7 +604,7 @@ window.editarConvite =
     convite.pessoas.forEach(
       (pessoa) => {
         adicionarCampoPessoa(
-          pessoa.nome
+          pessoa.nome, pessoa.id
         );
       }
     );
@@ -1168,6 +1166,7 @@ function atualizarTudo() {
   renderizarConvites();
   renderizarConvidados();
   atualizarDashboard();
+  window.atualizarResumoPresencas?.();
 }
 /* =========================================
    INICIALIZAÇÃO
@@ -1442,4 +1441,43 @@ function criarSlugUnico(nome) {
     if (!event.persisted) groups.forEach(key => drafts[key].forEach(release));
   });
   reload();
+})();
+(() => {
+  const notice=document.getElementById('presencasAviso'), panel=document.getElementById('presencasGrupos');
+  const names={confirmado:'Confirmados',nao_vai:'Não irão',pendente:'Ainda não responderam'};
+  let generation=0;
+  window.atualizarResumoPresencas=()=> {
+    for(const [estado,id] of Object.entries({confirmado:'totalConfirmadosOnline',nao_vai:'totalNaoOnline',pendente:'totalPendentes'})){
+      document.getElementById(id).textContent=panel.dataset[estado]??'—';
+    }
+  };
+  async function load(){
+    const version=++generation, client=window.CASAMENTO_FOTOS?.client;
+    panel.replaceChildren();for(const estado of Object.keys(names))delete panel.dataset[estado];
+    window.atualizarResumoPresencas();
+    if(!client){notice.textContent='Entre em Fotos com o administrador para ver as respostas.';return}
+    notice.textContent='Carregando confirmações…';
+    try{
+      const rows=[];
+      for(let i=0;;i+=200){
+        const {data,error}=await client.from('casamento_relatorio_presencas').select('convite_id,pessoa_id,convite_nome,nome,status').order('convite_id').order('pessoa_id').range(i,i+199);
+        if(version!==generation)return;
+        if(error)throw error;
+        rows.push(...data);if(data.length<200)break;
+      }
+      for(const [estado,titulo] of Object.entries(names)){
+        const subset=rows.filter(r=>r.status===estado).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+        panel.dataset[estado]=subset.length;
+        const box=document.createElement('section');box.className='painel';
+        const h=document.createElement('h3');h.textContent=titulo+' ('+subset.length+')';box.append(h);
+        for(const r of subset){const p=document.createElement('p');p.textContent=r.nome+' · '+r.convite_nome;box.append(p)}
+        panel.append(box);
+      }
+      notice.textContent=rows.length?'Lista atualizada.':'Nenhuma pessoa em convites publicados.';
+      window.atualizarResumoPresencas();
+    }catch{if(version===generation)notice.textContent='Não foi possível carregar as respostas. Confira sua conexão, o login e o SQL 09.'}
+  }
+  document.getElementById('lerPresencas').onclick=load;
+  document.querySelector('[data-page="confirmacoes"]').addEventListener('click',load);
+  window.addEventListener('casamento:fotos-auth',load);load();
 })();

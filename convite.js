@@ -101,10 +101,6 @@ async function iniciarConvite() {
       if (index < 0) convites.push(convite);
       else {
         const local = convites[index];
-        convite.pessoas = convite.pessoas.map(person => {
-          const previous = local.pessoas.find(item => item.id === person.id);
-          return previous ? { ...person, status: previous.status } : person;
-        });
         convites[index] = { ...local, ...convite };
       }
       localStorage.setItem('convitesCasamento', JSON.stringify(convites));
@@ -491,72 +487,28 @@ function renderizarPessoas() {
 }
 
 
-window.responderPresenca =
-  function (
-    pessoaId,
-    novoStatus
-  ) {
-    const indiceConvite =
-      convites.findIndex(
-        (item) =>
-          item.id === convite.id
-      );
-
-    if (
-      indiceConvite === -1
-    ) {
-      return;
-    }
-
-    const indicePessoa =
-      convites[
-        indiceConvite
-      ].pessoas.findIndex(
-        (pessoa) =>
-          pessoa.id === pessoaId
-      );
-
-    if (
-      indicePessoa === -1
-    ) {
-      return;
-    }
-
-    convites[
-      indiceConvite
-    ].pessoas[
-      indicePessoa
-    ].status =
-      novoStatus;
-
-    convite.pessoas[
-      indicePessoa
-    ].status =
-      novoStatus;
-
-    localStorage.setItem(
-      "convitesCasamento",
-      JSON.stringify(
-        convites
-      )
-    );
-
-    renderizarPessoas();
-
-    if (
-      novoStatus ===
-      "confirmado"
-    ) {
-      mostrarToast(
-        "Presença confirmada!"
-      );
-    } else {
-      mostrarToast(
-        "Resposta registrada."
-      );
-    }
-  };
-
+let enviandoPresenca = false;
+window.responderPresenca = async function(pessoaId, status) {
+  if (enviandoPresenca) return;
+  if (!window.temAcessoConvite) { mostrarToast('Abra o link completo do convite para enviar sua resposta.'); return; }
+  const pessoa = convite.pessoas.find(p=>p.id===pessoaId);
+  if (!pessoa) return;
+  enviandoPresenca=true;
+  listaPessoas.querySelectorAll('button').forEach(b=>b.disabled=true);
+  try {
+    const cfg=window.CASAMENTO_SUPABASE;
+    const res=await fetch(cfg.url+'/functions/v1/'+cfg.functionName,{
+      method:'POST',headers:{'Content-Type':'application/json',apikey:cfg.publishableKey},
+      cache:'no-store',referrerPolicy:'no-referrer',signal:AbortSignal.timeout(20000),
+      body:JSON.stringify({slug,token:new URLSearchParams(location.hash.slice(1)).get('acesso'),action:'responder_presenca',pessoaId,status})
+    });
+    const out=await res.json();
+    if (!res.ok || out.ok!==true || out.status!==status) throw Error();
+    pessoa.status=status;
+    mostrarToast(status==='confirmado'?'Presença confirmada!':'Resposta enviada aos noivos.');
+  } catch { mostrarToast('Não foi possível confirmar o envio. Recarregue para conferir ou tente novamente.'); }
+  finally { enviandoPresenca=false; renderizarPessoas(); }
+};
 
 function textoStatus(status) {
   if (
