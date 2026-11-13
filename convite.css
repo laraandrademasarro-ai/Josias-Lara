@@ -3082,3 +3082,10 @@ img {
 .pix-convite #copiarPix:hover { background:#234663; }
 .pix-convite #copiarPix:focus-visible { outline:3px solid #97733d; outline-offset:3px; }
 .pix-convite #pixCopiaStatus:not(:empty) { margin-top:10px; color:#33543d; font-size:13px; }
+.presente-convite { display:flex; flex-direction:column; }
+.presente-acoes { margin-top:auto; padding-top:14px; display:grid; gap:8px; }
+.presente-acoes .reserva-status:empty { display:none; }
+.presente-acoes .presente-reservar { width:100%; margin:0; min-height:44px; padding:10px 12px; border-radius:9px; font:600 14px/1.35 "Inter",sans-serif; }
+.presente-acoes .opcao-inteiro:not(:disabled) { background:#fcfaf5; border-color:#c5ae82; color:#102a46; }
+.presente-acoes .presente-reservar:not(:disabled):hover { background:#254562; color:white; }
+.presente-acoes .opcao-inteiro:not(:disabled):hover { background:#f4ecdc; color:#102a46; }
