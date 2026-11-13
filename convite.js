@@ -400,7 +400,11 @@ botaoEntrar?.addEventListener(
    RSVP
 ========================================= */
 
+function prazoEncerrado() {
+  return Date.now() >= Date.parse('2027-02-02T00:00:00-03:00') || document.getElementById('prazoPresenca').dataset.encerrado === 'sim';
+}
 function renderizarPessoas() {
+  if (prazoEncerrado()) document.getElementById('prazoPresenca').textContent = 'O prazo para confirmar presença terminou em 1º de fevereiro de 2027.';
   listaPessoas.innerHTML = "";
 
   convite.pessoas.forEach(
@@ -479,6 +483,7 @@ function renderizarPessoas() {
         </div>
       `;
 
+      if (prazoEncerrado()) card.querySelectorAll('button').forEach(b=>b.disabled=true);
       listaPessoas.appendChild(
         card
       );
@@ -489,6 +494,7 @@ function renderizarPessoas() {
 
 let enviandoPresenca = false;
 window.responderPresenca = async function(pessoaId, status) {
+  if (prazoEncerrado()) { renderizarPessoas(); mostrarToast('O prazo de confirmação terminou.'); return; }
   if (enviandoPresenca) return;
   if (!window.temAcessoConvite) { mostrarToast('Abra o link completo do convite para enviar sua resposta.'); return; }
   const pessoa = convite.pessoas.find(p=>p.id===pessoaId);
@@ -503,6 +509,7 @@ window.responderPresenca = async function(pessoaId, status) {
       body:JSON.stringify({slug,token:new URLSearchParams(location.hash.slice(1)).get('acesso'),action:'responder_presenca',pessoaId,status})
     });
     const out=await res.json();
+    if(res.status===410){document.getElementById('prazoPresenca').dataset.encerrado='sim';mostrarToast('O prazo de confirmação terminou.');return}
     if (!res.ok || out.ok!==true || out.status!==status) throw Error();
     pessoa.status=status;
     mostrarToast(status==='confirmado'?'Presença confirmada!':'Resposta enviada aos noivos.');
