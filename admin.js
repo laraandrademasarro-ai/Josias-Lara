@@ -1472,15 +1472,23 @@ function criarSlugUnico(nome) {
           if(data.length<200)break;
         }
       }
-      for(const [estado,titulo] of Object.entries(names)){
-        const subset=rows.filter(r=>r.status===estado).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
-        panel.dataset[estado]=subset.length;
-        const box=document.createElement('section');box.className='painel';
-        const h=document.createElement('h3');h.textContent=titulo+' ('+subset.length+')';box.append(h);
-        for(const r of subset){const p=document.createElement('p');p.textContent=r.nome+' · '+r.convite_nome;box.append(p)}
-        panel.append(box);
+      for(const estado of Object.keys(names)) panel.dataset[estado]=rows.filter(r=>r.status===estado).length;
+      const grupos=new Map();
+      for(const r of rows){if(!grupos.has(r.convite_id)) grupos.set(r.convite_id,[]); grupos.get(r.convite_id).push(r);}
+      const resposta={confirmado:'Vai comparecer',nao_vai:'Não vai',pendente:'Sem resposta'};
+      for(const pessoas of grupos.values()){
+        const box=document.createElement('section');box.className='rsvp-grupo por-convite';
+        const h=document.createElement('h3');h.textContent=pessoas[0].convite_nome;
+        const caption=document.createElement('small');caption.className='rsvp-legenda';caption.textContent='Convite · '+pessoas.length+(pessoas.length===1?' pessoa':' pessoas');
+        const list=document.createElement('ul');
+        for(const p of pessoas){
+          const li=document.createElement('li'),nome=document.createElement('strong'),badge=document.createElement('small');
+          nome.textContent=p.nome;badge.textContent=resposta[p.status];badge.dataset.resposta=p.status;
+          li.append(nome,badge);list.append(li);
+        }
+        box.append(caption,h,list);panel.append(box);
       }
-      notice.textContent=rows.length?rows.length+' pessoa(s) nos convites deste navegador.':'Nenhuma pessoa na aba Convites deste navegador.';
+      notice.textContent=rows.length ? grupos.size+(grupos.size===1?' convite':' convites')+' · '+rows.length+(rows.length===1?' pessoa':' pessoas')+' · '+panel.dataset.confirmado+' vão · '+panel.dataset.nao_vai+' não vão · '+panel.dataset.pendente+' sem resposta' : 'Nenhuma pessoa na aba Convites deste navegador.';
       window.atualizarResumoPresencas();
     }catch{if(version===generation)notice.textContent='Não foi possível carregar as respostas. Confira sua conexão, o login e o SQL 09.'}
   }
