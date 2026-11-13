@@ -1099,3 +1099,16 @@ select {
 #previaPresente { max-width:100%; max-height:220px; object-fit:contain; }
 #previaPresente[hidden] { display:none; }
 #presentesStatus, #presenteFormStatus { font-size:13px; line-height:1.6; overflow-wrap:anywhere; }
+#presencasAviso { margin:12px 0 18px; color:#536171; font-size:14px; }
+#presencasGrupos { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr)); gap:16px; align-items:start; }
+.rsvp-grupo { --tinta:#67501e; --fundo:#f7efd9; min-width:0; background:#fff; border:1px solid #e2dbcf; border-radius:14px; overflow:hidden; }
+.rsvp-grupo[data-estado="confirmado"] { --tinta:#305c4a; --fundo:#e9f2ed; }
+.rsvp-grupo[data-estado="nao_vai"] { --tinta:#804740; --fundo:#f6ece9; }
+.rsvp-grupo h3 { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0; padding:15px 17px; background:var(--fundo); color:var(--tinta); font:600 16px/1.35 Inter,sans-serif; }
+.rsvp-grupo h3 span { flex:none; padding:3px 10px; background:#fff; color:inherit; border-radius:20px; font-size:14px; font-variant-numeric:tabular-nums; }
+.rsvp-grupo ul { list-style:none; margin:0; padding:0 17px; }
+.rsvp-grupo li { display:grid; gap:4px; padding:12px 0; overflow-wrap:anywhere; }
+.rsvp-grupo li + li { border-top:1px solid #eee9df; }
+.rsvp-grupo li strong { color:#102a46; font-size:15px; }
+.rsvp-grupo li small { color:#526273; font-size:13px; }
+@media(max-width:620px){ #presencasGrupos { grid-template-columns:1fr; gap:10px; } }
