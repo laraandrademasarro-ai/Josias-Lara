@@ -219,7 +219,7 @@ function salvarConvites() {
   window.relerPresencas?.();
   localStorage.setItem(
     "convitesCasamento",
-    JSON.stringify(convites)
+    JSON.stringify(convites.filter(c=>!c._online))
   );
 }
 /* =========================================
@@ -567,12 +567,12 @@ formConvite
       abrirPagina(
         "convites"
       );
-      const saved = convites.find(item => item.id === conviteId.value);
-      if (saved?.acessoFotos && window.publicarConviteProtegido) {
+      const saved = conviteId.value ? convites.find(item => item.id === conviteId.value) : convites[convites.length-1];
+      if (saved && window.CASAMENTO_FOTOS && window.publicarConviteProtegido) {
         try {
           await window.publicarConviteProtegido(saved);
         } catch (error) {
-          alert('Alterações salvas neste navegador. O link online ainda não foi atualizado. ' + error.message);
+          alert('Não foi possível confirmar o salvamento na lista compartilhada. ' + error.message);
         }
       }
     }
@@ -674,7 +674,7 @@ window.copiarLinkConvite =
       );
     let token;
     try {
-      token = await window.publicarConviteProtegido(convite);
+      token = convite._online && convite.acessoFotos ? convite.acessoFotos : await window.publicarConviteProtegido(convite);
     } catch (error) {
       alert(error.message);
       return;
